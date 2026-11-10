@@ -1229,26 +1229,30 @@ footer{
   .topbar { background: rgba(246, 242, 236, 0.88) !important; backdrop-filter: blur(2px) !important; }
 </style>
 
-<style id="grit-video-bg">
-  /* Video fills screen behind everything, iOS + Android */
+
+
+<style id="grit-video-layer-fix">
+  /* Video is ONLY a background layer */
   #grit-bg-video {
     position: fixed !important;
-    top: 0 !important; left: 0 !important;
-    width: 100vw !important; height: 100dvh !important;
-    min-height: 100vh !important;
-    object-fit: cover !important;
-    object-position: center center !important;
+    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+    width: 100% !important; height: 100% !important; height: 100dvh !important;
+    object-fit: cover !important; object-position: center center !important;
     z-index: 0 !important;
     pointer-events: none !important;
-    background: #000 url('./background.jpg') center center / cover no-repeat !important;
   }
-  /* Content sits above video */
-  .shell { position: relative !important; z-index: 1 !important; background: transparent !important; }
-  .page { position: relative !important; z-index: 1 !important; background: transparent !important; }
-  /* If video fails, fall back to photo */
+  /* App must sit ABOVE the video - this was missing */
+  #root { position: relative !important; z-index: 2 !important; width: 100% !important; }
+  .shell { position: relative !important; z-index: 2 !important; background: transparent !important; }
+  .page { position: relative !important; z-index: 2 !important; background: transparent !important; }
+  /* Make sure topbar / cards are actually visible over video */
+  .topbar { position: sticky !important; z-index: 5 !important; background: rgba(246,242,236,0.92) !important; }
+  .card, .panel, .status { position: relative !important; z-index: 2 !important; background: rgba(246,242,236,0.88) !important; }
+  /* Gap between sections so video shows through */
+  .card { margin-bottom: 16px !important; }
+  .panel { margin-bottom: 16px !important; }
+  /* If video fails, show photo */
   body.grit-no-video { background: #000 url('./background.jpg') top center / 100% auto no-repeat !important; }
-  body.grit-no-video #grit-bg-video { display: none !important; }
-  body.grit-no-video .shell { background: transparent !important; }
 </style>
 </head>
 <body><video id="grit-bg-video" autoplay muted loop playsinline preload="auto" poster="./background.jpg"><source src="./background.mp4" type="video/mp4"></video>
