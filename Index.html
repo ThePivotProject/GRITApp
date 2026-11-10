@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>THE GRIT</title>
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./grit_icon.png">
+<link rel="apple-touch-icon" href="./grit_icon.png">
+<meta property="og:title" content="THE GRIT">
+<meta property="og:image" content="https://YOUR-DOMAIN.com/grit_icon.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background-color:#000;
+  background-image:url('./background.jpg');
+  background-size:100% auto;
+  background-position:top center;
+  background-repeat:no-repeat;
+  background-attachment:scroll;
+  min-height:100vh;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(24px + env(safe-area-inset-bottom,0px));
+  padding-left:calc(12px + env(safe-area-inset-left,0px));
+  padding-right:calc(12px + env(safe-area-inset-right,0px));
+}
+.wrap{max-width:440px;margin:0 auto}
+.topbar{background:rgba(246,242,236,.94);border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;position:sticky;top:calc(8px + env(safe-area-inset-top,0px));z-index:10}
+.topbar b{letter-spacing:.12em;font-size:18px}
+.topbar button{border:0;background:#111;color:#fff;border-radius:999px;padding:10px 14px;font-size:14px;min-height:44px;cursor:pointer}
+.card{background:rgba(246,242,236,.88);border-radius:14px;padding:14px;margin-bottom:16px}
+.card h2{font-size:15px;margin-bottom:8px}
+label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px;color:#222}
+label:first-child{margin-top:0}
+input,textarea{width:100%;background:rgba(239,233,224,.95);border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:12px;font-size:16px;font-family:inherit;resize:vertical}
+textarea{min-height:72px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.photo-box{width:100%;height:180px;border:2px dashed #bbb;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#eee;cursor:pointer}
+.photo-box img{width:100%;height:100%;object-fit:cover}
+.photo-box span{color:#666;font-size:14px}
+.btn{width:100%;border:0;background:#111;color:#fff;border-radius:12px;padding:14px;font-size:16px;min-height:48px;cursor:pointer;margin-top:10px}
+.btn.light{background:#fff;color:#111;border:1px solid #ddd}
+.small{font-size:13px;color:#444;margin-top:8px;line-height:1.4}
+#status{font-size:13px;text-align:center;margin:8px 0;color:#fff;background:rgba(0,0,0,.55);border-radius:999px;padding:6px 10px}
+.hidden{display:none!important}
+footer{text-align:center;color:#fff;font-size:12px;letter-spacing:.2em;margin-top:8px;opacity:.9}
+.roster-item{background:#fff;border-radius:10px;padding:10px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.roster-item button{border:0;background:#111;color:#fff;border-radius:999px;padding:8px 10px;font-size:13px}
+@media(max-width:360px){body{padding-left:8px;padding-right:8px}.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><b>THE GRIT</b><div><button id="shareBtn">Share</button> <button id="rosterBtn">Roster</button></div></div>
+  <div id="status">Ready</div>
+
+  <div class="card" id="athleteCard">
+    <h2>Athlete</h2>
+    <div class="photo-box" id="photoBox"><span>+ Add Photo</span><img id="photoImg" class="hidden"></div>
+    <input type="file" id="photoInput" accept="image/*" class="hidden">
+    <label for="f-athlete">Athlete</label>
+    <textarea id="f-athlete" rows="2" placeholder="Tap to edit"></textarea>
+    <div class="row">
+      <div><label for="f-sport">Sport</label><input id="f-sport" placeholder="Tap to edit"></div>
+      <div><label for="f-position">Position</label><input id="f-position" placeholder="Tap to edit"></div>
+    </div>
+  </div>
+
+  <div class="card"><label for="f-grateful">What are you grateful for?</label><textarea id="f-grateful"></textarea></div>
+  <div class="card"><label for="f-focus">Main Focus / Lift for the Month</label><textarea id="f-focus"></textarea><label for="f-warmup">Warm Up</label><textarea id="f-warmup"></textarea></div>
+
+  <div class="card">
+    <h2>Main Training</h2>
+    <label for="f-stretch">Stretch | Core</label><textarea id="f-stretch"></textarea>
+    <label for="f-lift">Main Lift | Movement</label><textarea id="f-lift"></textarea>
+    <label for="f-speed">Speed | Change of Direction</label><textarea id="f-speed"></textarea>
+  </div>
+
+  <div class="card"><label for="f-homework">Homework</label><textarea id="f-homework"></textarea><label for="f-mindset">Mindset</label><textarea id="f-mindset"></textarea></div>
+
+  <div class="card" id="rosterCard" class="hidden" style="display:none">
+    <h2>Coach Roster — Enter PIN</h2>
+    <input id="pinInput" inputmode="numeric" placeholder="4-digit PIN" maxlength="4">
+    <button class="btn" id="pinBtn">Unlock Roster</button>
+    <div id="rosterList"></div>
+    <button class="btn light" id="newAthleteBtn">+ New Athlete</button>
+    <div class="small">First time: set a 4-digit PIN. It stays on this device. Roster is stored in Supabase when connected, otherwise on this device.</div>
+  </div>
+
+  <div class="card">
+    <h2>Settings — Supabase Sync</h2>
+    <label>Project URL</label><input id="sbUrl" placeholder="https://xxxx.supabase.co">
+    <label>Anon Public Key</label><input id="sbKey" placeholder="Paste anon key only">
+    <button class="btn" id="connectBtn">Connect</button>
+    <div class="small" id="sbStatus">Not connected — edits save on this device only.</div>
+  </div>
+
+  <footer>THE GRIT</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const FIELDS=["athlete","sport","position","grateful","focus","warmup","stretch","lift","speed","homework","mindset","photo"];
+let sb=null, currentId=new URLSearchParams(location.search).get("id") || localStorage.getItem("grit_current_id") || ("grit-"+Date.now().toString(36));
+localStorage.setItem("grit_current_id", currentId);
+if(!new URLSearchParams(location.search).get("id")){ history.replaceState(null,"","?id="+currentId); }
+function setStatus(t){ document.getElementById("status").textContent=t; }
+function collect(){ const d={}; FIELDS.forEach(f=>{ const el=document.getElementById("f-"+f); if(el) d[f]=el.value; const img=document.getElementById("photoImg"); if(f==="photo") d.photo = img && !img.classList.contains("hidden") ? img.src : ""; }); return d; }
+function fill(d){ FIELDS.forEach(f=>{ if(f==="photo"){ if(d.photo){ const img=document.getElementById("photoImg"); img.src=d.photo; img.classList.remove("hidden"); document.querySelector("#photoBox span").style.display="none"; } return; } const el=document.getElementById("f-"+f); if(el && d[f]!=null) el.value=d[f]; }); }
+async function save(){
+  const data=collect();
+  localStorage.setItem("grit_"+currentId, JSON.stringify(data));
+  setStatus("Saved ✓");
+  if(sb){ try{ await sb.from("grit_programs").upsert({id:currentId, data, updated_at:new Date().toISOString()}); setStatus("Saved ✓ Synced"); }catch(e){ setStatus("Saved locally — sync failed"); } }
+}
+async function load(){
+  let data=null;
+  if(sb){ try{ const r=await sb.from("grit_programs").select("data").eq("id",currentId).single(); if(r.data) data=r.data.data; }catch(e){} }
+  if(!data){ try{ data=JSON.parse(localStorage.getItem("grit_"+currentId)||"null"); }catch(e){} }
+  if(data) fill(data);
+  setStatus(sb ? "Connected — live sync on" : "Ready — local save on");
+}
+function connect(){
+  const url=document.getElementById("sbUrl").value.trim();
+  const key=document.getElementById("sbKey").value.trim();
+  if(!url||!key){ alert("Paste Project URL + anon key"); return; }
+  localStorage.setItem("grit_sb_url",url); localStorage.setItem("grit_sb_key",key);
+  try{ sb=window.supabase.createClient(url,key); document.getElementById("sbStatus").textContent="Connected"; 
+    sb.channel("grit-"+currentId).on("postgres_changes",{event:"*",schema:"public",table:"grit_programs",filter:"id=eq."+currentId},(p)=>{ if(p.new && p.new.data) fill(p.new.data); setStatus("Updated from other device"); }).subscribe();
+    load();
+  }catch(e){ alert("Could not connect — check URL/key"); }
+}
+document.querySelectorAll("input,textarea").forEach(el=>{ el.addEventListener("input",()=>{ setStatus("Saving…"); clearTimeout(window._t); window._t=setTimeout(save,600); }); el.addEventListener("blur",save); });
+document.getElementById("photoBox").onclick=()=>document.getElementById("photoInput").click();
+document.getElementById("photoInput").onchange=(e)=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ const img=document.getElementById("photoImg"); img.src=r.result; img.classList.remove("hidden"); document.querySelector("#photoBox span").style.display="none"; save(); }; r.readAsDataURL(f); };
+document.getElementById("shareBtn").onclick=async()=>{ const link=location.origin+location.pathname+"?id="+currentId; try{ await navigator.clipboard.writeText(link); setStatus("Link copied"); }catch(e){ prompt("Copy link:",link); } };
+document.getElementById("connectBtn").onclick=connect;
+document.getElementById("rosterBtn").onclick=()=>{ const c=document.getElementById("rosterCard"); c.style.display = c.style.display==="none" ? "block" : "none"; };
+document.getElementById("pinBtn").onclick=()=>{
+  const pin=document.getElementById("pinInput").value.trim();
+  const saved=localStorage.getItem("grit_pin");
+  if(!saved){ if(pin.length!==4){ alert("Choose a 4-digit PIN"); return; } localStorage.setItem("grit_pin",pin); alert("PIN set"); }
+  else if(pin!==saved){ alert("Wrong PIN"); return; }
+  // List local + supabase ids
+  const ids=[]; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k.startsWith("grit_") && k!=="grit_current_id" && !k.includes("sb_") && k!=="grit_pin"){ ids.push(k.replace("grit_","")); } }
+  const list=document.getElementById("rosterList");
+  list.innerHTML = ids.length ? "" : "<div class='small'>No athletes yet on this device.</div>";
+  ids.forEach(id=>{ let name="Athlete"; try{ name=JSON.parse(localStorage.getItem("grit_"+id)||"{}").athlete||"Athlete"; }catch(e){} const div=document.createElement("div"); div.className="roster-item"; div.innerHTML="<span>"+(name||"Athlete")+"</span><span><button data-open='"+id+"'>Open</button> <button data-copy='"+id+"'>Copy Link</button></span>"; list.appendChild(div); });
+  list.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{ location.href=location.pathname+"?id="+b.dataset.open; });
+  list.querySelectorAll("[data-copy]").forEach(b=>b.onclick=async()=>{ const link=location.origin+location.pathname+"?id="+b.dataset.copy; await navigator.clipboard.writeText(link); setStatus("Link copied"); });
+};
+document.getElementById("newAthleteBtn").onclick=()=>{ const id="grit-"+Date.now().toString(36); location.href=location.pathname+"?id="+id; };
+window.addEventListener("beforeunload",save);
+// Restore saved Supabase
+const su=localStorage.getItem("grit_sb_url"), sk=localStorage.getItem("grit_sb_key");
+if(su && sk){ document.getElementById("sbUrl").value=su; document.getElementById("sbKey").value=sk; }
+load();
+if(su && sk){ try{ sb=window.supabase.createClient(su,sk); load(); }catch(e){} }
+</script>
+</body>
+</html>
